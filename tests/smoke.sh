@@ -94,8 +94,8 @@ docker exec -e MYSQL_PWD="${ROOT_PASSWORD}" "${CONTAINER_NAME}" /usr/bin/mysql -
 echo "OK: Database and table CRUD verified"
 
 echo "Verifying mysqldump..."
-docker exec -e MYSQL_PWD="${ROOT_PASSWORD}" "${CONTAINER_NAME}" \
-    /usr/bin/mysqldump -uroot --single-transaction smoke_test | grep -q "CREATE TABLE"
+DUMP_OUT="$(docker exec -e MYSQL_PWD="${ROOT_PASSWORD}" "${CONTAINER_NAME}" /usr/bin/mysqldump -uroot --single-transaction smoke_test)"
+printf '%s\n' "${DUMP_OUT}" | grep -q "CREATE TABLE"
 echo "OK: mysqldump verified"
 
 echo "Verifying datadir ownership..."
