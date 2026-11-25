@@ -22,7 +22,7 @@ Maintained by **Daniel G. Cosenza from FNX Labs**.
   - **Upstream version changed:** `no`
   - Official Oracle MySQL 8.4.13 LTS Debian 13 package (`8.4.13.1-1debian13`). Release notes: https://dev.mysql.com/doc/relnotes/mysql/8.4/en/news-8-4-13.html
 - Vulnerability gate: **0 fixable Critical/High** in Trivy and Grype (SBOM scan) (14 upstream-unfixed).
-- Published multi-arch digest (Docker Hub + GHCR): `dgcosenza/mysql@sha256:b8bad1b449e12c24946e5e7f98eb832f32aae1dcfa553ad1931e0eedb222c12c` (Cosign OIDC signed + SPDX/CycloneDX SBOM + SLSA L3 provenance).
+- Published multi-arch digest (Docker Hub + GHCR): `dgcosenza/mysql@sha256:4cb75b1b896689e4cca678b8da4221e3ac6572fe8d117d27cb38ac73a9ec6422` (Cosign OIDC signed + SPDX/CycloneDX SBOM + SLSA L3 provenance).
 ---
 
 ---
