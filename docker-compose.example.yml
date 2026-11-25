@@ -1,50 +1,36 @@
-# Example production deployment for dgcosenza/mysql:8.4
-# Copy to docker-compose.yml and provide credentials via .env or Docker secrets.
-
 services:
   mysql:
     image: dgcosenza/mysql:8.4
-    container_name: mysql84
+    container_name: mysql
     restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
+    read_only: true
+    cap_drop:
+      - ALL
     cap_add:
       - SYS_NICE
-    deploy:
-      resources:
-        limits:
-          cpus: '2.00'
-          memory: 2048M
-        reservations:
-          memory: 256M
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /var/run/mysqld:uid=999,gid=999,mode=1777,size=16m
+      - /tmp:mode=1777,size=128m
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
-      - MYSQL_DATABASE=${MYSQL_DATABASE:-app}
-      - MYSQL_USER=${MYSQL_USER:-app}
+      - MYSQL_DATABASE=myapp
+      - MYSQL_USER=myapp
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./conf.d:/etc/mysql/conf.d:ro
-      - ./initdb.d:/docker-entrypoint-initdb.d:ro
-    networks:
-      - db_internal
     healthcheck:
       test: ["CMD", "healthcheck.sh"]
       interval: 30s
       timeout: 10s
       retries: 5
       start_period: 60s
-      start_interval: 5s
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "20m"
-        max-file: "5"
+    deploy:
+      resources:
+        limits:
+          cpus: "2.00"
+          memory: 2048M
 
 volumes:
   mysql_data:
-
-networks:
-  db_internal:
-    driver: bridge
-    internal: true

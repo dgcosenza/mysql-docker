@@ -34,6 +34,8 @@ docker volume create "${VOLUME_NAME}" >/dev/null
 
 echo "Starting container (default non-root user)..."
 docker run -d --name "${CONTAINER_NAME}" \
+    --cap-drop ALL \
+    --cap-add SYS_NICE \
     --security-opt no-new-privileges:true \
     -e MYSQL_ROOT_PASSWORD="${ROOT_PASSWORD}" \
     -e MYSQL_DATABASE="${DATABASE}" \

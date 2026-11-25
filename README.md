@@ -1,46 +1,82 @@
 # MySQL 8.4 LTS on Debian 13 (trixie) — Hardened Container Image
 
-[![CI](https://github.com/dgcosenza/mysql-docker/actions/workflows/daily.yml/badge.svg)](https://github.com/dgcosenza/mysql-docker/actions/workflows/daily.yml)
-[![Docker Hub Pulls](https://img.shields.io/docker/pulls/dgcosenza/mysql?label=docker%20pulls)](https://hub.docker.com/r/dgcosenza/mysql)
-[![Image Size](https://img.shields.io/docker/image-size/dgcosenza/mysql/8.4?label=image%20size)](https://hub.docker.com/r/dgcosenza/mysql)
-[![License](https://img.shields.io/github/license/dgcosenza/mysql-docker)](LICENSE)
+[![Daily MySQL 8.4 image](https://github.com/dgcosenza/mysql-docker/actions/workflows/daily.yml/badge.svg)](https://github.com/dgcosenza/mysql-docker/actions/workflows/daily.yml)
+[![Packaging License: MIT](https://img.shields.io/badge/packaging-MIT-blue.svg)](https://github.com/dgcosenza/mysql-docker/blob/main/LICENSE)
+[![Upstream License: GPL-2.0-only](https://img.shields.io/badge/upstream-GPL--2.0--only-green.svg)](https://github.com/mysql/mysql-server/blob/trunk/LICENSE)
+[![Signed with Cosign](https://img.shields.io/badge/signed-cosign%20OIDC-blueviolet.svg)](#supply-chain-verification)
+[![SLSA Level 3](https://img.shields.io/badge/SLSA-Level%203-brightgreen.svg)](#supply-chain-verification)
+[![Architecture](https://img.shields.io/badge/arch-amd64-informational.svg)](#supported-architectures)
+[![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/dgcosenza/mysql-docker/badge)](https://scorecard.dev/viewer/?uri=github.com/dgcosenza/mysql-docker)
+[![Docker Pulls](https://img.shields.io/docker/pulls/dgcosenza/mysql)](https://hub.docker.com/r/dgcosenza/mysql)
+[![Docker Image Size](https://img.shields.io/docker/image-size/dgcosenza/mysql/8.4)](https://hub.docker.com/r/dgcosenza/mysql)
+[![Latest Release](https://img.shields.io/github/v/release/dgcosenza/mysql-docker?label=version)](https://github.com/dgcosenza/mysql-docker/releases)
 
-A hardened, continuously rebuilt **MySQL 8.4 LTS Community Server** container image on **Debian 13 (`trixie-slim`)**, installing server and client packages from the official GPG-verified Oracle MySQL Debian 13 APT repository and compiling `gosu` from source with the latest patched Go toolchain.
+A hardened, rootless **MySQL 8.4 LTS Community Server** container image on **Debian 13 (`trixie-slim`)**, installing server and client packages from Oracle's official GPG-verified Debian 13 APT repository and compiling `gosu` from source with the latest patched Go toolchain, maintained by **Daniel G. Cosenza from FNX Labs**.
 
-Maintained by **Daniel G. Cosenza from FNX Labs**.
+- **Docker Hub:** [`dgcosenza/mysql`](https://hub.docker.com/r/dgcosenza/mysql)
+- **GitHub Container Registry (GHCR):** [`ghcr.io/dgcosenza/mysql`](https://github.com/dgcosenza/mysql-docker/pkgs/container/mysql) (identical signed digest)
+- **Source Repository:** [`dgcosenza/mysql-docker`](https://github.com/dgcosenza/mysql-docker)
+- **Upstream Application:** [MySQL Community Server](https://dev.mysql.com/) (`GPL-2.0-only`)
+
+---
 
 ## Current Versions
 
 <!-- versions:start -->
-_Last verified build: **2026-11-25** (UTC)_
-
 | Component | Resolved Version |
-|-----------|------------------|
-| MySQL Community Server (LTS) | `8.4.13` (`8.4.13.1-1debian13`) |
-| Base OS | Debian `13.8` (`debian:trixie-slim`) |
-| Step-down Helper | `gosu 1.20` (built with Go `1.27.4`) |
-| Fixable Critical/High (Trivy / Grype) | `0` / `0` |
-
-**Recent upstream updates:**
-- Daily base OS (`debian:trixie-slim`) security refresh and CVE-gated verification.
+| --- | --- |
+| MySQL Community Server (LTS) | `8.4.13 (8.4.13.1-1debian13)` |
+| Step-down Helper | `gosu 1.20 (Go 1.27.4)` |
+| Base OS | `Debian 13.8 (trixie-slim)` |
+| Architectures | `linux/amd64` |
+| Last verified build (UTC) | `2026-11-25` |
+| Security gate (Trivy + Grype on SBOM) | **0 fixable Critical/High** |
 <!-- versions:end -->
 
-## Supported Tags
+---
 
-| Tag | Description |
-|-----|-------------|
-| `latest`, `8.4` | Moving tags tracking the newest verified daily MySQL 8.4 LTS build |
-| `8.4.x` | Latest build for a specific upstream MySQL 8.4 patch release (e.g. `8.4.13`) |
-| `8.4.x-YYYYMMDD` | Immutable date-stamped build (e.g. `8.4.13-20261124`) |
-| `sha-<short>` | Immutable commit-stamped build |
+## Supported Tags & Tag Policy
+
+Identical OCI digests are published to **Docker Hub** (`dgcosenza/mysql`) and **GHCR** (`ghcr.io/dgcosenza/mysql`), accompanied by an automated signed [GitHub Release](https://github.com/dgcosenza/mysql-docker/releases):
+
+| Tag | Policy | Description |
+| --- | --- | --- |
+| `8.4.x-<YYYYMMDD>` (e.g. `8.4.13-20261125`) | **Immutable** | Date-stamped daily rebuild pinning the MySQL 8.4 LTS patch release and UTC build date. |
+| `sha-<short>` | **Immutable** | Packaging repository Git commit tag. |
+| `8.4.x` (e.g. `8.4.13`) | Moving | Latest verified Debian 13 security rebuild of that MySQL patch release. |
+| `8.4`, `latest` | Moving | Latest verified daily MySQL 8.4 LTS build. |
+
+**Production pinning:** Pin by immutable registry digest rather than an unpinned moving tag:
+
+```yaml
+image: dgcosenza/mysql:8.4@sha256:<digest>
+# or via GitHub Container Registry (identical digest):
+image: ghcr.io/dgcosenza/mysql:8.4@sha256:<digest>
+```
+
+---
+
+## Supported Architectures
+
+| Architecture | Status | Verification |
+| --- | --- | --- |
+| `linux/amd64` | **Published & natively tested** | Built, smoke-tested (UID `999`, initdb, CRUD, `mysqldump`, negative healthcheck), Dive-gated, Syft/Trivy/Grype-scanned, and Cosign-signed on native x86_64 CI runners. |
+| `linux/arm64` | **Not shipped upstream** | Oracle's official Debian 13 (`trixie`) APT repository (`repo.mysql.com/apt/debian/dists/trixie/Release`) publishes `amd64` packages only. `arm64` will be enabled automatically if Oracle adds `arm64` Debian 13 binaries. |
+
+---
 
 ## Quick Start
 
-### Docker CLI
+### Docker CLI (hardened, rootless)
 
 ```bash
 docker run -d --name mysql84 \
+  --read-only \
+  --cap-drop ALL \
+  --cap-add SYS_NICE \
   --security-opt no-new-privileges:true \
+  --tmpfs /var/run/mysqld:uid=999,gid=999,mode=1777,size=16m \
+  --tmpfs /tmp:mode=1777,size=128m \
   -e MYSQL_ROOT_PASSWORD=change_me_root \
   -e MYSQL_DATABASE=myapp \
   -e MYSQL_USER=myapp \
@@ -50,17 +86,25 @@ docker run -d --name mysql84 \
   dgcosenza/mysql:8.4
 ```
 
-### Docker Compose
+### Hardened Docker Compose
+
+See [`docker-compose.example.yml`](https://github.com/dgcosenza/mysql-docker/blob/main/docker-compose.example.yml):
 
 ```yaml
 services:
   mysql:
     image: dgcosenza/mysql:8.4
     restart: unless-stopped
-    security_opt:
-      - no-new-privileges:true
+    read_only: true
+    cap_drop:
+      - ALL
     cap_add:
       - SYS_NICE
+    security_opt:
+      - no-new-privileges:true
+    tmpfs:
+      - /var/run/mysqld:uid=999,gid=999,mode=1777,size=16m
+      - /tmp:mode=1777,size=128m
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
       - MYSQL_DATABASE=myapp
@@ -79,7 +123,7 @@ volumes:
   mysql_data:
 ```
 
-See [docker-compose.example.yml](docker-compose.example.yml) for a complete production-ready configuration.
+---
 
 ## Configuration
 
@@ -88,7 +132,7 @@ See [docker-compose.example.yml](docker-compose.example.yml) for a complete prod
 Full drop-in compatibility with the official `docker-library/mysql:8.4` entrypoint:
 
 | Variable | Description | Required |
-|----------|-------------|----------|
+| --- | --- | --- |
 | `MYSQL_ROOT_PASSWORD` | Password for `root` (or `MYSQL_ROOT_PASSWORD_FILE` for Docker secrets) | Yes¹ |
 | `MYSQL_ALLOW_EMPTY_PASSWORD` | Allow empty root password (development only) | No |
 | `MYSQL_RANDOM_ROOT_PASSWORD` | Generate a random root password printed to logs | No |
@@ -102,27 +146,24 @@ Full drop-in compatibility with the official `docker-library/mysql:8.4` entrypoi
 ¹ Required on first initialization unless `MYSQL_ALLOW_EMPTY_PASSWORD` or `MYSQL_RANDOM_ROOT_PASSWORD` is set.  
 ² Required if `MYSQL_USER` is set.
 
-### Volumes
+### Volumes, Ports, and UID/GID
 
-| Path | Purpose |
-|------|---------|
-| `/var/lib/mysql` | Persistent database data directory (UID/GID `999:999`) |
-| `/docker-entrypoint-initdb.d` | Initialization scripts run once on an empty data directory (`*.sh`, `*.sql`, `*.sql.gz`, `*.sql.xz`, `*.sql.zst`, `*.sql.bz2`) |
-| `/etc/mysql/conf.d` | Custom `.cnf` server overrides |
+| Path / Port | Mode / Owner | Purpose |
+| --- | --- | --- |
+| `/var/lib/mysql` | `999:999` (`mysql`) | Persistent database data directory |
+| `/docker-entrypoint-initdb.d` | Read-only | First-start initialization scripts (`*.sh`, `*.sql`, `*.sql.{gz,xz,zst,bz2}`) |
+| `/etc/mysql/conf.d` | Read-only | Custom `.cnf` server overrides |
+| `3306/tcp`, `33060/tcp` | Internal | Classic MySQL and X Protocol ports |
 
-### Ports
+Runs as non-root **`mysql:mysql` (UID/GID `999:999`)** by default, compatible with `read_only: true`, `cap_drop: [ALL]` (optional `cap_add: [SYS_NICE]` for InnoDB thread priority), and `no-new-privileges:true`.
 
-- `3306/tcp` — Classic MySQL protocol
-- `33060/tcp` — MySQL X Protocol
+---
 
-### User, UID, and GID
+## Healthcheck
 
-- Runs as non-root `mysql:mysql` (**UID 999 / GID 999**) by default, matching upstream `mysql:8.4`.
-- If started with `--user 0` against a root-owned host bind mount, `docker-entrypoint.sh` fixes ownership and immediately steps down to `mysql` via the source-rebuilt `gosu`.
+`healthcheck.sh` verifies that `/var/run/mysqld/mysqld.sock` is live and executes `SELECT 1;` over the Unix socket when `MYSQL_ROOT_PASSWORD` (or `MYSQL_ROOT_PASSWORD_FILE`) is available.
 
-### Healthcheck
-
-The built-in `healthcheck.sh` verifies that `/var/run/mysqld/mysqld.sock` is live and executes `SELECT 1;` over the Unix socket when `MYSQL_ROOT_PASSWORD` (or `MYSQL_ROOT_PASSWORD_FILE`) is available.
+---
 
 ## Upgrade and Migration from Upstream `mysql:8.4`
 
@@ -130,18 +171,57 @@ This image is data-directory compatible with upstream `mysql:8.4`:
 
 1. **Take a verified dump first:** Run `mysqldump --all-databases --single-transaction --routines --triggers` before switching.
 2. **Stay on the 8.4 LTS series:** Never downgrade a MySQL 8.4 data directory to 8.0 or jump to 9.x unintentionally.
-3. **Preserve your data volume:** Never run `docker compose down -v` or drop existing volumes. Recreate only the database service (`docker compose up -d <service>`).
-4. **UID/GID parity:** Existing `mysql:8.4` volumes are already owned by `999:999`, so non-root startup works immediately.
-5. **Keep a rollback tag:** Tag the outgoing image locally before switching so you can revert cleanly if required.
+3. **Preserve your data volume:** Never run `docker compose down -v`. Recreate only the database service (`docker compose up -d --no-deps <service>`).
+4. **Keep a rollback tag:** Tag the outgoing image locally before switching to `dgcosenza/mysql:8.4@sha256:<digest>` (or GHCR).
+
+---
+
+## Supply-Chain Verification
+
+Every published digest on both Docker Hub and GHCR is keyless-signed with **Sigstore Cosign** (GitHub OIDC), attested with **SPDX** and **CycloneDX** SBOMs, and backed by **SLSA Build L3** provenance (`actions/attest-build-provenance`).
+
+### Verify image signature with Cosign
+
+```bash
+cosign verify \
+  --certificate-identity-regexp="^https://github\.com/dgcosenza/mysql-docker/\.github/workflows/daily\.yml@refs/heads/main$" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
+  ghcr.io/dgcosenza/mysql:8.4
+
+# Or against Docker Hub (identical digest):
+cosign verify \
+  --certificate-identity-regexp="^https://github\.com/dgcosenza/mysql-docker/\.github/workflows/daily\.yml@refs/heads/main$" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
+  dgcosenza/mysql:8.4
+```
+
+### Verify SPDX / CycloneDX SBOM attestations
+
+```bash
+cosign verify-attestation \
+  --type spdxjson \
+  --certificate-identity-regexp="^https://github\.com/dgcosenza/mysql-docker/\.github/workflows/daily\.yml@refs/heads/main$" \
+  --certificate-oidc-issuer="https://token.actions.githubusercontent.com" \
+  ghcr.io/dgcosenza/mysql@sha256:<digest>
+```
+
+### Verify SLSA Build Provenance
+
+```bash
+gh attestation verify oci://ghcr.io/dgcosenza/mysql:8.4 --owner dgcosenza
+```
+
+---
 
 ## Security
 
-- **Trivy** (OS + libraries): SARIF uploaded to GitHub Code Scanning; table and JSON reports retained for 90 days; **blocking hard gate** on any fixable `CRITICAL` or `HIGH` vulnerability.
-- **Grype**: **blocking hard gate** (`--only-fixed`, severity cutoff `high`) with table report retained for 90 days.
-- **SBOM & Provenance**: SPDX-JSON SBOM (Syft) and build provenance JSON retained for 90 days.
-- **Unfixable findings**: None currently at Critical/High; any future upstream-unfixed findings are tracked in daily artifacts.
+- **Preflight gates:** Every push and PR runs **Hadolint** (blocking on warning+), **Gitleaks** secret scanning across git history, and **public-content/attribution** checks.
+- **Vulnerability scan policy:** Every build generates **SPDX** and **CycloneDX** SBOMs with **Syft**, scans with **Trivy** (table, JSON, SARIF upload, blocking `--ignore-unfixed` gate) and **Grype** scanning the SPDX SBOM (`--only-fixed --fail-on high`), and enforces a **Dive** efficiency gate (`>= 95%`, `<= 5%` wasted user bytes).
+- **Current status:** **0 fixable Critical/High** vulnerabilities across Debian 13 OS packages, MySQL 8.4 LTS, and source-built `gosu`.
+- **Dependency automation:** Renovate (`renovate.json`) pins base image digests and GitHub Action commit SHAs; Dependabot security alerts and OpenSSF Scorecard monitoring are enabled.
+- See [`SECURITY.md`](https://github.com/dgcosenza/mysql-docker/blob/main/SECURITY.md) for responsible disclosure.
 
-See [SECURITY.md](SECURITY.md) for responsible disclosure.
+---
 
 ## Build Locally
 
@@ -152,29 +232,38 @@ docker buildx build --platform linux/amd64 --load \
   -t dgcosenza/mysql:8.4-local .
 ```
 
+---
+
 ## Update Policy
 
-Every day at **04:47 UTC** (and on push to `main`, pull requests, or manual dispatch), `.github/workflows/daily.yml` runs a fully automated 7-step pipeline gated by `.github/scripts/public-check.sh`:
+[`.github/workflows/daily.yml`](https://github.com/dgcosenza/mysql-docker/blob/main/.github/workflows/daily.yml) runs automatically every day at **04:47 UTC**, on pushes to `main`, on pull requests (verification only), and via `workflow_dispatch`:
 
-1. **Upstream check:** Queries Oracle's official Debian 13 MySQL 8.4 LTS APT index (`repo.mysql.com`), `tianon/gosu`, and `go.dev` to resolve the latest official package and Go toolchain, diffs against `versions.json`, and saves `upstream-changes.md` as a 90-day artifact.
-2. **Clean rebuild:** Rebuilds on `debian:trixie-slim` with `--no-cache` on scheduled runs, running `apt-get upgrade` and compiling `gosu` from source, then generates an SPDX-JSON SBOM and provenance record.
-3. **Vulnerability fix & hard gates:** Runs Trivy (table, JSON, SARIF upload, and blocking 0 fixable `CRITICAL`/`HIGH` gate) and Grype (blocking 0 fixable `CRITICAL`/`HIGH` gate), retaining all reports for 90 days and diffing newly fixed CVEs.
-4. **Functional smoke test:** Executes `tests/smoke.sh` to verify healthy startup, UID 999 non-root execution, MySQL 8.4 version, `/docker-entrypoint-initdb.d`, SQL CRUD, `mysqldump`, and negative healthcheck failure.
-5. **Registry publish:** On non-PR runs when Docker Hub credentials are configured, pushes `latest`, `8.4`, `<version>`, `<version>-<YYYYMMDD>`, and `sha-<short>` tags and records the published digest.
-6. **Automated documentation sync:** Updates `versions.json`, the `<!-- versions:start -->` block in `README.md`, and `CHANGELOG.md` via `github-actions[bot]` (`[skip ci]`, validated by `public-check.sh`) whenever metadata changes, then syncs the overview and short description to Docker Hub.
-7. **Failure alerting:** Automatically opens or updates a single GitHub issue labeled `ci-failure` on any `main` or scheduled failure, and auto-closes it on the next green run.
+1. **Preflight & upstream check:** Runs public-content checks, **Hadolint**, and **Gitleaks**; queries Oracle's Debian 13 MySQL 8.4 LTS APT index (`repo.mysql.com`), `tianon/gosu`, `go.dev`, and Docker Hub for digest-pinned base images, emitting `upstream-changes.md`.
+2. **No-cache rebuild:** Rebuilds on `debian:trixie-slim` with `--no-cache` on schedule, running `apt-get upgrade` and compiling `gosu` from source with the latest patched Go release.
+3. **Smoke, Dive & vulnerability gates:** Runs [`tests/smoke.sh`](https://github.com/dgcosenza/mysql-docker/blob/main/tests/smoke.sh), enforces the **Dive** efficiency gate (`>= 95%`, `<= 5%` wasted), generates **Syft** SPDX + CycloneDX SBOMs, and gates publication on **0 fixable Critical/High** in both **Trivy** and **Grype** (scanning the SPDX SBOM).
+4. **Dual-registry publish & supply-chain signing:** Publishes the identical digest to **GHCR** (`ghcr.io/dgcosenza/mysql`) and **Docker Hub** (`dgcosenza/mysql`) with tags `latest`, `8.4`, `<version>`, `<version>-<YYYYMMDD>`, and `sha-<short>`; signs and attests SPDX/CycloneDX SBOMs via **Cosign** keyless OIDC; emits **SLSA Build L3** provenance; and publishes a signed **GitHub Release** with checksums and SBOMs.
+5. **Automated documentation sync:** Commits updated `versions.json`, the README `Current Versions` block, and a dated `CHANGELOG.md` entry via `github-actions[bot]` (`[skip ci]`, validated by `public-check.sh`), then syncs the Docker Hub overview and short description.
+6. **Failure alerting:** Opens or updates a single GitHub issue labeled `ci-failure` on any `main` or scheduled failure, and auto-closes it on the next green run.
+
+---
 
 ## Design Decisions
 
-- **Debian 13 (`trixie-slim`) + official Oracle MySQL APT repo:** Upstream `mysql:8.4` is based on Oracle Linux 9 (`oraclelinux:9-slim`), which frequently carries dozens of stale RPM vulnerabilities and bundles `mysql-shell` (with Python libraries). Building on Debian 13 (`trixie-slim`) using Oracle's official signed `mysql-8.4-lts` Debian 13 repository (key fingerprint `BCA43417C3B485DD128EC6D4B7B3B788A8D3785C`) eliminates those CVEs and shrinks the attack surface while preserving binary-identical MySQL 8.4 LTS storage compatibility.
+- **Debian 13 (`trixie-slim`) + official Oracle MySQL APT repo:** Upstream `mysql:8.4` is based on Oracle Linux 9 (`oraclelinux:9-slim`), which carries dozens of stale RPM vulnerabilities and bundles `mysql-shell` (with Python libraries). Building on Debian 13 (`trixie-slim`) using Oracle's signed `mysql-8.4-lts` Debian 13 repository (`BCA43417C3B485DD128EC6D4B7B3B788A8D3785C`) eliminates those CVEs while preserving binary-identical MySQL 8.4 LTS storage compatibility.
+- **`linux/amd64` only:** Oracle's official Debian 13 APT feed (`repo.mysql.com/apt/debian/dists/trixie/Release`) currently ships `Architectures: amd64` only.
 - **Source-rebuilt `gosu`:** Compiling `gosu` with the latest Go release eliminates Go stdlib CVEs found in prebuilt binaries.
-- **Omission of `mysql-shell`:** Keeps the runtime minimal and avoids pulling bundled Python runtimes; standard `/usr/bin/mysql`, `/usr/bin/mysqladmin`, and `/usr/bin/mysqldump` are included.
-- **Direct `mysqld` PID 1 (`exec`):** Preserves graceful InnoDB shutdown on `SIGTERM`.
+- **Hadolint `DL3008` ignore:** Daily `--no-cache` security rebuilds intentionally pull the newest Debian 13 security updates via `apt-get`.
+
+---
 
 ## License
 
-- Repository build files, scripts, and documentation: **MIT License** — see [LICENSE](LICENSE).
-- MySQL Community Server 8.4 LTS: **GPL-2.0-only** — see [THIRD-PARTY-NOTICES.md](THIRD-PARTY-NOTICES.md).
+This repository follows a clear packaging-vs-upstream license split:
+
+- **Container packaging, healthcheck script, CI workflows, and documentation (`packaging: MIT`):** Licensed under the [MIT License](https://github.com/dgcosenza/mysql-docker/blob/main/LICENSE) — copyright **Daniel G. Cosenza from FNX Labs**.
+- **Bundled upstream software — MySQL Community Server 8.4 LTS (`upstream: GPL-2.0-only`):** Copyright Oracle and/or its affiliates — licensed under the [GNU General Public License v2.0](https://github.com/mysql/mysql-server/blob/trunk/LICENSE).
+
+Full third-party notices are maintained in [`THIRD-PARTY-NOTICES.md`](https://github.com/dgcosenza/mysql-docker/blob/main/THIRD-PARTY-NOTICES.md). Release history is maintained in [`CHANGELOG.md`](https://github.com/dgcosenza/mysql-docker/blob/main/CHANGELOG.md).
 
 ## Credits
 

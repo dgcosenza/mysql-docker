@@ -3,7 +3,8 @@
 # Upstream: https://dev.mysql.com/ / https://github.com/docker-library/mysql
 # Maintainer: Daniel G. Cosenza from FNX Labs
 
-ARG DEBIAN_VERSION=trixie-slim
+ARG GO_BASE=golang:1.27.4-trixie@sha256:430985542100b871e108ccc00e8dcc5eef08ca14ee5825e98ebf563d8ffec4ee
+ARG DEBIAN_BASE=debian:trixie-slim@sha256:8aa5a7bf5a1955bddbe7d74fcdd0b91ab30e74362a8b73af672b0481b35b44a0
 ARG MYSQL_MAJOR=8.4
 ARG MYSQL_DEB_VERSION=8.4.13.1-1debian13
 ARG MYSQL_UPSTREAM_VERSION=8.4.13
@@ -16,23 +17,28 @@ ARG IMAGE_REVISION=dev
 ARG IMAGE_SOURCE=https://github.com/dgcosenza/mysql-docker
 
 # ---- Stage 1: Build gosu from source with the latest patched Go toolchain ----
-FROM golang:${GO_VERSION}-trixie AS gosu-builder
+FROM ${GO_BASE} AS gosu-builder
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 ARG GOSU_VERSION
 ARG TARGETOS=linux
-ARG TARGETARCH
+ARG TARGETARCH=amd64
 
+WORKDIR /src
+RUN git clone --depth 1 --branch "${GOSU_VERSION}" https://github.com/tianon/gosu.git /src/gosu
+
+WORKDIR /src/gosu
 RUN set -eux; \
-    git clone --depth 1 --branch "${GOSU_VERSION}" https://github.com/tianon/gosu.git /src/gosu; \
-    cd /src/gosu; \
     CGO_ENABLED=0 GOOS="${TARGETOS}" GOARCH="${TARGETARCH}" \
         go build -trimpath -ldflags="-s -w" -o /out/gosu .; \
     go test ./...
 
 # ---- Stage 2: Runtime image ----
-FROM debian:${DEBIAN_VERSION} AS runtime
+FROM ${DEBIAN_BASE} AS runtime
 
-ARG DEBIAN_VERSION
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 ARG MYSQL_MAJOR
 ARG MYSQL_DEB_VERSION
 ARG MYSQL_UPSTREAM_VERSION
@@ -54,23 +60,22 @@ LABEL org.opencontainers.image.title="MySQL 8.4 LTS on Debian 13 (trixie)" \
       org.opencontainers.image.documentation="${IMAGE_SOURCE}#readme" \
       org.opencontainers.image.vendor="Daniel G. Cosenza from FNX Labs" \
       org.opencontainers.image.authors="Daniel G. Cosenza from FNX Labs" \
-      org.opencontainers.image.licenses="GPL-2.0-only" \
-      org.opencontainers.image.base.name="docker.io/library/debian:${DEBIAN_VERSION}" \
+      org.opencontainers.image.licenses="GPL-2.0-only AND MIT" \
+      org.opencontainers.image.base.name="debian:trixie-slim" \
       io.github.dgcosenza.mysql.major="${MYSQL_MAJOR}" \
       io.github.dgcosenza.mysql.version="${MYSQL_UPSTREAM_VERSION}" \
       io.github.dgcosenza.mysql.deb_version="${MYSQL_DEB_VERSION}" \
       io.github.dgcosenza.mysql.gosu="${GOSU_VERSION}" \
       io.github.dgcosenza.mysql.go="${GO_VERSION}"
 
-# Create mysql user/group with consistent UID/GID 999 (docker-library convention)
-RUN groupadd --system --gid 999 mysql \
-    && useradd --system --uid 999 --gid 999 --home-dir /var/lib/mysql --no-create-home --shell /bin/bash mysql
+COPY --from=gosu-builder --chmod=0755 /out/gosu /usr/local/bin/gosu
 
-COPY --from=gosu-builder /out/gosu /usr/local/bin/gosu
-RUN chmod 0755 /usr/local/bin/gosu && gosu --version && gosu nobody true
-
-# Upgrade base OS, verify MySQL APT signing key, and install MySQL 8.4 LTS Community Server
+# Create mysql user, upgrade base OS, verify MySQL APT key, and install MySQL 8.4 LTS
 RUN set -eux; \
+    groupadd --system --gid 999 mysql; \
+    useradd --system --uid 999 --gid 999 --home-dir /var/lib/mysql --no-create-home --shell /bin/bash mysql; \
+    gosu --version; \
+    gosu nobody true; \
     apt-get update; \
     apt-get -y upgrade; \
     apt-get install -y --no-install-recommends \
@@ -113,9 +118,11 @@ RUN set -eux; \
         "mysql-community-client=${MYSQL_DEB_VERSION}"; \
     \
     apt-mark auto '.*' > /dev/null; \
-    [ -z "${savedAptMark}" ] || apt-mark manual ${savedAptMark} mysql-community-server mysql-community-client > /dev/null; \
+    printf '%s\n' "${savedAptMark}" | xargs -r apt-mark manual > /dev/null; \
+    apt-mark manual mysql-community-server mysql-community-client > /dev/null; \
     apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false curl gpg; \
-    rm -rf /var/lib/apt/lists/*; \
+    apt-get clean; \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
     \
     # Reset postinst data directory and configure container-friendly paths \
     rm -rf /var/lib/mysql; \
@@ -134,9 +141,8 @@ RUN set -eux; \
     mysql --version; \
     mysqldump --version
 
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-COPY healthcheck.sh /usr/local/bin/healthcheck.sh
-RUN chmod 0755 /usr/local/bin/docker-entrypoint.sh /usr/local/bin/healthcheck.sh
+COPY --chmod=0755 docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+COPY --chmod=0755 healthcheck.sh /usr/local/bin/healthcheck.sh
 
 ENV LANG=C.UTF-8 \
     GOSU_VERSION="${GOSU_VERSION}" \
