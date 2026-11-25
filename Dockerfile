@@ -127,7 +127,7 @@ RUN set -eux; \
     find /etc/mysql/ -name '*.cnf' -print0 \
         | xargs -0 grep -lZE '^(bind-address|mysqlx-bind-address|log-error|user\s)' \
         | xargs -rt -0 sed -Ei 's/^(bind-address|mysqlx-bind-address|log-error|user\s)/#&/'; \
-    printf "[mysqld]\npid-file = /var/run/mysqld/mysqld.pid\nsocket = /var/run/mysqld/mysqld.sock\ndatadir = /var/lib/mysql\nsecure-file-priv = /var/lib/mysql-files\nskip-host-cache\n\n[client]\nsocket = /var/run/mysqld/mysqld.sock\n" \
+    printf "[mysqld]\npid-file = /var/run/mysqld/mysqld.pid\nsocket = /var/run/mysqld/mysqld.sock\ndatadir = /var/lib/mysql\nsecure-file-priv = /var/lib/mysql-files\nhost-cache-size = 0\n\n[client]\nsocket = /var/run/mysqld/mysqld.sock\n" \
         > /etc/mysql/mysql.conf.d/99-container.cnf; \
     \
     mysqld --version; \
