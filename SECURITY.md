@@ -16,6 +16,8 @@ Only the latest daily build of the MySQL 8.4 LTS track receives security updates
 
 **Do not open a public issue** for security vulnerabilities.
 
-Report privately through GitHub's private vulnerability reporting: open the repository's **Security** tab and select **Report a vulnerability**.
+Report privately through GitHub Security Advisories: open the repository's **Security** tab or submit a private advisory directly at [dgcosenza/mysql-docker Security Advisories](https://github.com/dgcosenza/mysql-docker/security/advisories/new).
+
+For upstream MySQL Server vulnerabilities, follow the [Oracle Vulnerability Reporting Policy](https://www.oracle.com/corporate/security-practices/assurance/vulnerability/reporting.html).
 
 Please include a description of the vulnerability, affected tag or digest, reproduction steps, and any suggested remediation. We aim to acknowledge reports within 48 hours.
