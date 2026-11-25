@@ -6,7 +6,7 @@
   "mysql_deb_version": "8.4.13.1-1debian13",
   "go_version": "1.27.4",
   "gosu_version": "1.20",
-  "digest": "pending-hub-publish",
+  "digest": "dgcosenza/mysql@sha256:4110eecff23a06a710eb409f1e9d9ea1ac5106d0d965505368089d64323845f3",
   "trivy_fixable_critical_high": 0,
   "grype_fixable_critical_high": 0,
   "cves_seen": [
