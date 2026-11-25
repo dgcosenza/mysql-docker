@@ -12,17 +12,17 @@ Maintained by **Daniel G. Cosenza from FNX Labs**.
 ## Current Versions
 
 <!-- versions:start -->
-_Last verified build: **2026-11-24** (UTC)_
+_Last verified build: **2026-11-25** (UTC)_
 
 | Component | Resolved Version |
 |-----------|------------------|
 | MySQL Community Server (LTS) | `8.4.13` (`8.4.13.1-1debian13`) |
-| Base OS | Debian `13` (`debian:trixie-slim`) |
+| Base OS | Debian `13.8` (`debian:trixie-slim`) |
 | Step-down Helper | `gosu 1.20` (built with Go `1.27.4`) |
 | Fixable Critical/High (Trivy / Grype) | `0` / `0` |
 
 **Recent upstream updates:**
-- Initial hardened Debian 13 release for MySQL 8.4 LTS.
+- Daily base OS (`debian:trixie-slim`) security refresh and CVE-gated verification.
 <!-- versions:end -->
 
 ## Supported Tags

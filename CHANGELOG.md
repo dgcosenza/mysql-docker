@@ -8,6 +8,14 @@ Maintained by **Daniel G. Cosenza from FNX Labs**.
 
 ## [Unreleased]
 
+
+## [2026-11-25]
+
+### Changed
+- Rebuilt MySQL `8.4.13` (`8.4.13.1-1debian13`) on Debian `13.8` (`pending-hub-publish`)
+
+### Security
+- Trivy and Grype gates verified: 0 fixable Critical/High vulnerabilities.
 ## [2026-11-24]
 
 ### Added
