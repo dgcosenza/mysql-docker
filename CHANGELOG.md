@@ -1,0 +1,20 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+Maintained by **Daniel G. Cosenza from FNX Labs**.
+
+## [Unreleased]
+
+## [2026-11-24]
+
+### Added
+- Initial hardened MySQL 8.4 LTS (`8.4.13.1-1debian13`) image on Debian 13 (`trixie-slim`) using Oracle's official GPG-verified Debian 13 MySQL 8.4 LTS APT repository.
+- Source-rebuilt `gosu 1.20` using Go `1.27.4` (`golang:1.27.4-trixie`).
+- Built-in `healthcheck.sh`, full `docker-library/mysql` entrypoint parity, non-root `mysql` (UID/GID `999:999`) default user, and full 7-step automated daily CI pipeline.
+
+### Security
+- Eliminated 92 fixable vulnerabilities (2 Critical, 90 High) present in the upstream Oracle Linux 9 `mysql:8.4` image.
+- Verified 0 fixable Critical/High findings in both Trivy and Grype.

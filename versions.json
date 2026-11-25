@@ -1,0 +1,13 @@
+{
+  "last_updated": "2026-11-24",
+  "debian_version": "13",
+  "mysql_major": "8.4",
+  "mysql_version": "8.4.13",
+  "mysql_deb_version": "8.4.13.1-1debian13",
+  "go_version": "1.27.4",
+  "gosu_version": "1.20",
+  "digest": "pending-hub-publish",
+  "trivy_fixable_critical_high": 0,
+  "grype_fixable_critical_high": 0,
+  "cves_seen": []
+}
