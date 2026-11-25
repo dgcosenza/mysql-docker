@@ -29,8 +29,19 @@ A hardened, rootless **MySQL 8.4 LTS Community Server** container image on **Deb
 | Step-down Helper | `gosu 1.20 (Go 1.27.4)` |
 | Base OS | `Debian 13.8 (trixie-slim)` |
 | Architectures | `linux/amd64` |
+| Uncompressed size (per arch) | `amd64: 123.4 MB` |
 | Last verified build (UTC) | `2026-11-25` |
-| Security gate (Trivy + Grype on SBOM) | **0 fixable Critical/High** |
+| Published multi-arch digest | `dgcosenza/mysql@sha256:3b6979a704869d3287b28d29f16e9c163718b736c43b23719960e2d5edeb82ce` |
+| GHCR mirror | `ghcr.io/dgcosenza/mysql@sha256:3b6979a704869d3287b28d29f16e9c163718b736c43b23719960e2d5edeb82ce` |
+| Supply chain | Cosign OIDC signed + SPDX & CycloneDX SBOM attestations + SLSA Build L3 provenance |
+| Security gate (Trivy + Grype on SBOM) | **0 fixable Critical/High** (14 upstream-unfixed) |
+
+**Recent upstream changes:**
+- **MySQL 8.4:** `8.4.13` (`8.4.13.1-1debian13`) -> `8.4.13` (`8.4.13.1-1debian13`)
+- **gosu:** `1.20` -> `1.20`
+- **Go toolchain (gosu builder):** `1.27.4` -> `1.27.4`
+- **Upstream version changed:** `no`
+- Official Oracle MySQL 8.4.13 LTS Debian 13 package (`8.4.13.1-1debian13`). Release notes: https://dev.mysql.com/doc/relnotes/mysql/8.4/en/news-8-4-13.html
 <!-- versions:end -->
 
 ---
