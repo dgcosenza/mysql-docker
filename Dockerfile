@@ -29,6 +29,8 @@ WORKDIR /src
 RUN git clone --depth 1 --branch "${GOSU_VERSION}" https://github.com/tianon/gosu.git /src/gosu
 
 WORKDIR /src/gosu
+# Patch the indirect golang.org/x/sys dependency (fixable CVE-2026-39824).
+RUN go get golang.org/x/sys@v0.50.0
 RUN set -eux; \
     CGO_ENABLED=0 GOOS="${TARGETOS}" GOARCH="${TARGETARCH}" \
         go build -trimpath -ldflags="-s -w" -o /out/gosu .; \
