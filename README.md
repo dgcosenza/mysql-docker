@@ -7,6 +7,7 @@
 [![SLSA Level 3](https://img.shields.io/badge/SLSA-Level%203-brightgreen.svg)](#supply-chain-verification)
 [![Architecture](https://img.shields.io/badge/arch-amd64-informational.svg)](#supported-architectures)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/dgcosenza/mysql-docker/badge)](https://scorecard.dev/viewer/?uri=github.com/dgcosenza/mysql-docker)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/17164/badge)](https://www.bestpractices.dev/projects/17164)
 [![Docker Pulls](https://img.shields.io/docker/pulls/dgcosenza/mysql)](https://hub.docker.com/r/dgcosenza/mysql)
 [![Docker Image Size](https://img.shields.io/docker/image-size/dgcosenza/mysql/8.4)](https://hub.docker.com/r/dgcosenza/mysql)
 [![Latest Release](https://img.shields.io/github/v/release/dgcosenza/mysql-docker?label=version)](https://github.com/dgcosenza/mysql-docker/releases)
