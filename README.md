@@ -34,7 +34,7 @@ A hardened, rootless **MySQL 8.4 LTS Community Server** container image on **Deb
 | Published multi-arch digest | `dgcosenza/mysql@sha256:4cb75b1b896689e4cca678b8da4221e3ac6572fe8d117d27cb38ac73a9ec6422` |
 | GHCR mirror | `ghcr.io/dgcosenza/mysql@sha256:4cb75b1b896689e4cca678b8da4221e3ac6572fe8d117d27cb38ac73a9ec6422` |
 | Supply chain | Cosign OIDC signed + SPDX & CycloneDX SBOM attestations + SLSA Build L3 provenance |
-| Security gate (Trivy + Grype on SBOM) | **0 fixable Critical/High** (14 upstream-unfixed) |
+| Security gate (Trivy + Grype on SBOM) | **0 fixable findings of any severity** (14 upstream-unfixed) |
 
 **Recent upstream changes:**
 - **MySQL 8.4:** `8.4.13` (`8.4.13.1-1debian13`) -> `8.4.13` (`8.4.13.1-1debian13`)
@@ -227,8 +227,8 @@ gh attestation verify oci://ghcr.io/dgcosenza/mysql:8.4 --owner dgcosenza
 ## Security
 
 - **Preflight gates:** Every push and PR runs **Hadolint** (blocking on warning+), **Gitleaks** secret scanning across git history, and **public-content/attribution** checks.
-- **Vulnerability scan policy:** Every build generates **SPDX** and **CycloneDX** SBOMs with **Syft**, scans with **Trivy** (table, JSON, SARIF upload, blocking `--ignore-unfixed` gate) and **Grype** scanning the SPDX SBOM (`--only-fixed --fail-on high`), and enforces a **Dive** efficiency gate (`>= 95%`, `<= 5%` wasted user bytes).
-- **Current status:** **0 fixable Critical/High** vulnerabilities across Debian 13 OS packages, MySQL 8.4 LTS, and source-built `gosu`.
+- **Vulnerability scan policy (all severities with a fix):** Every build generates **SPDX** and **CycloneDX** SBOMs with **Syft**, scans with **Trivy** (table, JSON, SARIF upload, blocking `--ignore-unfixed` gate) and **Grype** scanning the SPDX SBOM (`--only-fixed --fail-on negligible`), and enforces a **Dive** efficiency gate (`>= 95%`, `<= 5%` wasted user bytes).
+- **Current status:** **0 fixable findings of any severity** vulnerabilities across Debian 13 OS packages, MySQL 8.4 LTS, and source-built `gosu`.
 - **Dependency automation:** Renovate (`renovate.json`) pins base image digests and GitHub Action commit SHAs; Dependabot security alerts and OpenSSF Scorecard monitoring are enabled.
 - See [`SECURITY.md`](https://github.com/dgcosenza/mysql-docker/blob/main/SECURITY.md) for responsible disclosure.
 
@@ -251,7 +251,7 @@ docker buildx build --platform linux/amd64 --load \
 
 1. **Preflight & upstream check:** Runs public-content checks, **Hadolint**, and **Gitleaks**; queries Oracle's Debian 13 MySQL 8.4 LTS APT index (`repo.mysql.com`), `tianon/gosu`, `go.dev`, and Docker Hub for digest-pinned base images, emitting `upstream-changes.md`.
 2. **No-cache rebuild:** Rebuilds on `debian:trixie-slim` with `--no-cache` on schedule, running `apt-get upgrade` and compiling `gosu` from source with the latest patched Go release.
-3. **Smoke, Dive & vulnerability gates:** Runs [`tests/smoke.sh`](https://github.com/dgcosenza/mysql-docker/blob/main/tests/smoke.sh), enforces the **Dive** efficiency gate (`>= 95%`, `<= 5%` wasted), generates **Syft** SPDX + CycloneDX SBOMs, and gates publication on **0 fixable Critical/High** in both **Trivy** and **Grype** (scanning the SPDX SBOM).
+3. **Smoke, Dive & vulnerability gates:** Runs [`tests/smoke.sh`](https://github.com/dgcosenza/mysql-docker/blob/main/tests/smoke.sh), enforces the **Dive** efficiency gate (`>= 95%`, `<= 5%` wasted), generates **Syft** SPDX + CycloneDX SBOMs, and gates publication on **0 fixable findings of any severity** in both **Trivy** and **Grype** (scanning the SPDX SBOM).
 4. **Dual-registry publish & supply-chain signing:** Publishes the identical digest to **GHCR** (`ghcr.io/dgcosenza/mysql`) and **Docker Hub** (`dgcosenza/mysql`) with tags `latest`, `8.4`, `<version>`, `<version>-<YYYYMMDD>`, and `sha-<short>`; signs and attests SPDX/CycloneDX SBOMs via **Cosign** keyless OIDC; emits **SLSA Build L3** provenance; and publishes a signed **GitHub Release** with checksums and SBOMs.
 5. **Automated documentation sync:** Commits updated `versions.json`, the README `Current Versions` block, and a dated `CHANGELOG.md` entry via `github-actions[bot]` (`[skip ci]`, validated by `public-check.sh`), then syncs the Docker Hub overview and short description.
 6. **Failure alerting:** Opens or updates a single GitHub issue labeled `ci-failure` on any `main` or scheduled failure, and auto-closes it on the next green run.
