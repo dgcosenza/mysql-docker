@@ -30,11 +30,11 @@ A hardened, rootless **MySQL 8.4 LTS Community Server** container image on **Deb
 | Base OS | `Debian 13.8 (trixie-slim)` |
 | Architectures | `linux/amd64` |
 | Uncompressed size (per arch) | `amd64: 124.1 MB` |
-| Last verified build (UTC) | `2026-11-25` |
-| Published multi-arch digest | `dgcosenza/mysql@sha256:4cb75b1b896689e4cca678b8da4221e3ac6572fe8d117d27cb38ac73a9ec6422` |
-| GHCR mirror | `ghcr.io/dgcosenza/mysql@sha256:4cb75b1b896689e4cca678b8da4221e3ac6572fe8d117d27cb38ac73a9ec6422` |
+| Last verified build (UTC) | `2026-11-26` |
+| Published multi-arch digest | `dgcosenza/mysql@sha256:5f772f378850f6bf3ee51f5b168d390d2c06a42a9ead25d2798272bbc58c3566` |
+| GHCR mirror | `ghcr.io/dgcosenza/mysql@sha256:5f772f378850f6bf3ee51f5b168d390d2c06a42a9ead25d2798272bbc58c3566` |
 | Supply chain | Cosign OIDC signed + SPDX & CycloneDX SBOM attestations + SLSA Build L3 provenance |
-| Security gate (Trivy + Grype on SBOM) | **0 fixable findings of any severity** (14 upstream-unfixed) |
+| Security gate (Trivy + Grype on SBOM) | **0 fixable Critical/High** (14 upstream-unfixed) |
 
 **Recent upstream changes:**
 - **MySQL 8.4:** `8.4.13` (`8.4.13.1-1debian13`) -> `8.4.13` (`8.4.13.1-1debian13`)

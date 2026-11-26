@@ -10,6 +10,22 @@ Maintained by **Daniel G. Cosenza from FNX Labs**.
 
 <!-- changelog:auto -->
 
+## [8.4.13] — 2026-11-26
+
+### Automated Daily Build
+- Verified components: MySQL Community Server (LTS) `8.4.13 (8.4.13.1-1debian13)`, Step-down Helper `gosu 1.20 (Go 1.27.4)`, Base OS `Debian 13.8 (trixie-slim)`.
+- Architectures verified: `linux/amd64` (native smoke tests + Dive efficiency gate).
+- Upstream changes:
+  - **MySQL 8.4:** `8.4.13` (`8.4.13.1-1debian13`) -> `8.4.13` (`8.4.13.1-1debian13`)
+  - **gosu:** `1.20` -> `1.20`
+  - **Go toolchain (gosu builder):** `1.27.4` -> `1.27.4`
+  - **Upstream version changed:** `no`
+  - Official Oracle MySQL 8.4.13 LTS Debian 13 package (`8.4.13.1-1debian13`). Release notes: https://dev.mysql.com/doc/relnotes/mysql/8.4/en/news-8-4-13.html
+- Vulnerability gate: **0 fixable Critical/High** in Trivy and Grype (SBOM scan) (14 upstream-unfixed).
+- Published multi-arch digest (Docker Hub + GHCR): `dgcosenza/mysql@sha256:5f772f378850f6bf3ee51f5b168d390d2c06a42a9ead25d2798272bbc58c3566` (Cosign OIDC signed + SPDX/CycloneDX SBOM + SLSA L3 provenance).
+
+---
+
 ## [8.4.13] — 2026-11-25
 
 ### Automated Daily Build
