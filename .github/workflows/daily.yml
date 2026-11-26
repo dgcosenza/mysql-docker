@@ -298,7 +298,7 @@ jobs:
           sarif_file: 'trivy-results-amd64.sarif'
           category: trivy-mysql-amd64
 
-      - name: Scan image with Trivy — HARD GATE (0 fixable CRITICAL/HIGH, amd64)
+      - name: Scan image with Trivy — HARD GATE (0 fixable findings of any severity, amd64)
         uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
         with:
           image-ref: '${{ env.IMAGE_NAME }}:ci-candidate-amd64'
@@ -308,7 +308,7 @@ jobs:
           ignore-unfixed: true
           exit-code: '1'
 
-      - name: Scan SPDX SBOM with Grype — HARD GATE (0 fixable CRITICAL/HIGH, amd64)
+      - name: Scan SPDX SBOM with Grype — HARD GATE (0 fixable findings of any severity, amd64)
         shell: bash
         run: |
           set -euo pipefail
@@ -551,7 +551,7 @@ jobs:
           - **gosu:** \`${{ needs.resolve.outputs.gosu_version }}\` (Go \`${{ needs.resolve.outputs.go_version }}\`)
           - **Base OS:** Debian \`${DEBIAN_VER}\` (\`trixie-slim\`)
           - **Architecture:** \`linux/amd64\` (${AMD64_MB} MB — Oracle's official Debian 13 MySQL 8.4 APT repository ships \`amd64\` only)
-          - **Security gate:** 0 fixable Critical/High (Trivy + Grype on SPDX SBOM), Dive efficiency >= 95%
+          - **Security gate:** 0 fixable findings of any severity (Trivy + Grype on SPDX SBOM), Dive efficiency >= 95%
 
           ### Identical Dual-Registry Digests
           - **GHCR:** \`ghcr.io/${IMAGE_NAME}@${INDEX_DIGEST}\`
