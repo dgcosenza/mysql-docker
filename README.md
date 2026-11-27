@@ -1,16 +1,33 @@
 # MySQL 8.4 LTS on Debian 13 (trixie) — Hardened Container Image
 
-[![Daily MySQL 8.4 image](https://github.com/dgcosenza/mysql-docker/actions/workflows/daily.yml/badge.svg)](https://github.com/dgcosenza/mysql-docker/actions/workflows/daily.yml)
-[![Packaging License: MIT](https://img.shields.io/badge/packaging-MIT-blue.svg)](https://github.com/dgcosenza/mysql-docker/blob/main/LICENSE)
-[![Upstream License: GPL-2.0-only](https://img.shields.io/badge/upstream-GPL--2.0--only-green.svg)](https://github.com/mysql/mysql-server/blob/trunk/LICENSE)
-[![Signed with Cosign](https://img.shields.io/badge/signed-cosign%20OIDC-blueviolet.svg)](#supply-chain-verification)
-[![SLSA Level 3](https://img.shields.io/badge/SLSA-Level%203-brightgreen.svg)](#supply-chain-verification)
-[![Architecture](https://img.shields.io/badge/arch-amd64-informational.svg)](#supported-architectures)
+[![Daily CI](https://github.com/dgcosenza/mysql-docker/actions/workflows/daily.yml/badge.svg)](https://github.com/dgcosenza/mysql-docker/actions/workflows/daily.yml)
+[![OpenSSF Scorecard Workflow](https://github.com/dgcosenza/mysql-docker/actions/workflows/scorecard.yml/badge.svg)](https://github.com/dgcosenza/mysql-docker/actions/workflows/scorecard.yml)
+[![Gitleaks Secret Scan](https://github.com/dgcosenza/mysql-docker/actions/workflows/gitleaks.yml/badge.svg)](https://github.com/dgcosenza/mysql-docker/actions/workflows/gitleaks.yml)
+[![Public Content Check](https://github.com/dgcosenza/mysql-docker/actions/workflows/public-check.yml/badge.svg)](https://github.com/dgcosenza/mysql-docker/actions/workflows/public-check.yml)
 [![OpenSSF Scorecard](https://api.scorecard.dev/projects/github.com/dgcosenza/mysql-docker/badge)](https://scorecard.dev/viewer/?uri=github.com/dgcosenza/mysql-docker)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/17164/badge)](https://www.bestpractices.dev/projects/17164)
-[![Docker Pulls](https://img.shields.io/docker/pulls/dgcosenza/mysql)](https://hub.docker.com/r/dgcosenza/mysql)
-[![Docker Image Size](https://img.shields.io/docker/image-size/dgcosenza/mysql/8.4)](https://hub.docker.com/r/dgcosenza/mysql)
-[![Latest Release](https://img.shields.io/github/v/release/dgcosenza/mysql-docker?label=version)](https://github.com/dgcosenza/mysql-docker/releases)
+
+[![Trivy + Grype: 0 Fixable CVEs](https://img.shields.io/badge/Trivy%20%2B%20Grype-0%20fixable%20CVEs-brightgreen?logo=trivy&logoColor=white)](https://github.com/dgcosenza/mysql-docker/security/code-scanning)
+[![Signed: Cosign OIDC](https://img.shields.io/badge/signed-Cosign%20OIDC-blueviolet)](https://github.com/dgcosenza/mysql-docker#supply-chain-verification)
+[![SLSA Build L3](https://img.shields.io/badge/SLSA-Build%20L3-brightgreen)](https://github.com/dgcosenza/mysql-docker/attestations)
+[![SBOM: SPDX + CycloneDX](https://img.shields.io/badge/SBOM-SPDX%20%2B%20CycloneDX-0A7BBB?logo=spdx&logoColor=white)](https://github.com/dgcosenza/mysql-docker/releases/latest)
+[![Base OS](https://img.shields.io/badge/base-Debian%2013%20(trixie--slim)-A81D33?logo=debian&logoColor=white)](https://github.com/dgcosenza/mysql-docker/blob/main/Dockerfile)
+[![Architectures](https://img.shields.io/badge/arch-amd64-007ec6?logo=linux&logoColor=white)](https://github.com/dgcosenza/mysql-docker#supported-architectures)
+[![Healthcheck: CI Verified](https://img.shields.io/badge/healthcheck-CI%20verified-brightgreen?logo=docker&logoColor=white)](https://github.com/dgcosenza/mysql-docker#healthcheck)
+[![Renovate Enabled](https://img.shields.io/badge/renovate-enabled-1A1F6C?logo=renovate&logoColor=white)](https://github.com/dgcosenza/mysql-docker/blob/main/renovate.json)
+[![Dependabot Enabled](https://img.shields.io/badge/dependabot-enabled-025E8C?logo=dependabot&logoColor=white)](https://github.com/dgcosenza/mysql-docker/blob/main/.github/dependabot.yml)
+[![Daily Rebuilds](https://img.shields.io/badge/rebuilds-daily-2088FF?logo=githubactions&logoColor=white)](https://github.com/dgcosenza/mysql-docker/actions/workflows/daily.yml)
+
+[![Latest Release](https://img.shields.io/github/v/release/dgcosenza/mysql-docker?label=version&logo=github)](https://github.com/dgcosenza/mysql-docker/releases/latest)
+[![Release Date](https://img.shields.io/github/release-date/dgcosenza/mysql-docker?label=released&logo=github)](https://github.com/dgcosenza/mysql-docker/releases/latest)
+[![Last Commit](https://img.shields.io/github/last-commit/dgcosenza/mysql-docker?logo=github)](https://github.com/dgcosenza/mysql-docker/commits/main)
+[![Docker Pulls](https://img.shields.io/docker/pulls/dgcosenza/mysql?logo=docker&logoColor=white)](https://hub.docker.com/r/dgcosenza/mysql)
+[![Docker Image Size](https://img.shields.io/docker/image-size/dgcosenza/mysql/8.4?logo=docker&logoColor=white)](https://hub.docker.com/r/dgcosenza/mysql)
+[![Registries: Docker Hub + GHCR](https://img.shields.io/badge/registries-Docker%20Hub%20%2B%20GHCR-2496ED?logo=docker&logoColor=white)](https://github.com/dgcosenza/mysql-docker/pkgs/container/mysql)
+[![Packaging License: MIT](https://img.shields.io/badge/packaging-MIT-blue?logo=opensourceinitiative&logoColor=white)](https://github.com/dgcosenza/mysql-docker/blob/main/LICENSE)
+[![Upstream License](https://img.shields.io/badge/upstream-GPL--2.0--only-green?logo=opensourceinitiative&logoColor=white)](https://github.com/mysql/mysql-server/blob/trunk/LICENSE)
+[![GitHub Issues](https://img.shields.io/github/issues/dgcosenza/mysql-docker?logo=github)](https://github.com/dgcosenza/mysql-docker/issues)
+[![FNX Labs Catalog](https://img.shields.io/badge/catalog-FNX%20Labs-0b1020?logo=githubpages&logoColor=white)](https://dgcosenza.github.io/)
 
 A hardened, rootless **MySQL 8.4 LTS Community Server** container image on **Debian 13 (`trixie-slim`)**, installing server and client packages from Oracle's official GPG-verified Debian 13 APT repository and compiling `gosu` from source with the latest patched Go toolchain, maintained by **Daniel G. Cosenza from FNX Labs**.
 
