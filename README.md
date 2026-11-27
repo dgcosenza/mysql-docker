@@ -49,8 +49,8 @@ A hardened, rootless **MySQL 8.4 LTS Community Server** container image on **Deb
 | Architectures | `linux/amd64` |
 | Uncompressed size (per arch) | `amd64: 124.1 MB` |
 | Last verified build (UTC) | `2026-11-27` |
-| Published multi-arch digest | `dgcosenza/mysql@sha256:9de8e8fd69023966310317c550d3d565b9e40b2a73ebea8a1c73919585fac8b5` |
-| GHCR mirror | `ghcr.io/dgcosenza/mysql@sha256:9de8e8fd69023966310317c550d3d565b9e40b2a73ebea8a1c73919585fac8b5` |
+| Published multi-arch digest | `dgcosenza/mysql@sha256:9e590f73bd958d2a4e4256cf39b468618895d8e3661bccf26c7b73016e0e5c4e` |
+| GHCR mirror | `ghcr.io/dgcosenza/mysql@sha256:9e590f73bd958d2a4e4256cf39b468618895d8e3661bccf26c7b73016e0e5c4e` |
 | Supply chain | Cosign OIDC signed + SPDX & CycloneDX SBOM attestations + SLSA Build L3 provenance |
 | Security gate (Trivy + Grype on SBOM) | **0 fixable findings of any severity** (14 upstream-unfixed) |
 
